@@ -15,8 +15,14 @@ You should have received a copy of the GNU General Public License along with thi
 */
 
 /**
-* For activation && deactivation
-**/
+ * Init
+ */
+include('class.itemoperator.php');
+$hui_itemOperater = new hui_itemOperater();
+
+/**
+ * For activation && deactivation
+ */
 register_activation_hook(__FILE__, 'hui_init');
 register_deactivation_hook(__FILE__, 'hui_disable');
 
@@ -29,12 +35,13 @@ function hui_init(){
             //A new story...
         );
         update_option('hui_options', $hui_init_options);
-        update_option('hui_init', md5(date('Y H:i:s')));
+        update_option('hui_init', md5(date('Y-m-d H:i:s')));
     }
     //A new story...
 }
 
 function hui_disable(){
+    $hui_itemOperater -> disableAllItems();
     //A new story...
 }
 ?>
