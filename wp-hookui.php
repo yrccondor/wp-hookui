@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License along with thi
  * Init
  */
 include('class.itemoperator.php');
-$hui_itemOperater = new hui_itemOperater();
+$hui_item_operator = new hui_item_operator();
 
 /**
  * For activation && deactivation
@@ -29,19 +29,51 @@ register_deactivation_hook(__FILE__, 'hui_disable');
 function hui_init(){
     if(version_compare(get_bloginfo('version'), '4.4', '<')){
         deactivate_plugins(basename(__FILE__)); //disable
+    }else{
+        if(!get_option('hui_init')){
+            $hui_file_hash = array(
+                'hash_0' => md5_file('custom/functions-custom-0.php'),
+                'hash_1' => md5_file('custom/functions-custom-1.php'),
+            )
+            $hui_init_options = array(
+                'target_file' => 'functions-custom-0.php',
+                'group_hash' => $hui_file_hash,
+            );
+            update_option('hui_options', $hui_init_options);
+            include('version.php');
+            update_option('hui_version', $hui_version);
+            update_option('hui_init', md5(date('Y-m-d H:i:s')));
+        }else{
+            $hui_item_operator -> enable_all_items();
+            include('version.php');
+            if(!get_option('hui_version') || get_option('hui_version')['version'] != $hui_version['version']){
+                update_option('hui_version', $hui_version); //update version
+            }
+        }
     }
-    if(!get_option('hui_init')){
-        $hui_init_options = array(
-            //A new story...
-        );
-        update_option('hui_options', $hui_init_options);
-        update_option('hui_init', md5(date('Y-m-d H:i:s')));
-    }
-    //A new story...
+    
 }
 
 function hui_disable(){
-    $hui_itemOperater -> disableAllItems();
-    //A new story...
+    $hui_item_operator -> disable_all_items();
+}
+
+/**
+ * Import functions
+ */
+include('hui-functions.php');
+
+/**
+ * Import main file
+ */
+$hui_target_file = get_option('hui_options')['target_file'];
+if($hui_target_file != ''){
+    include('custom/'.$hui_target_file);
+}else{
+    include('custom/functions-custom-0.php');
+    $hui_init_options = array(
+        'target_file' => 'functions-custom-0.php'
+    );
+    update_option('hui_options', $hui_init_options); //repair
 }
 ?>
