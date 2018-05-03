@@ -15,7 +15,7 @@ Content: a:5:{s:7:"item_id";s:40:"00000000000000000000000000000001-9999999";s:7:
 Content-Hash: 0efe8dfe5984c68e23657eeea700389a
 Disable: False
 */
-function h1_a1_999999999() {
+function h1_a1_9999999() {
     // Here is an example. You can do anything you want here. Have fun!
 }
 add_action('init', 'h1_a1_9999999');
