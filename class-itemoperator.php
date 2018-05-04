@@ -43,5 +43,28 @@ class hui_item_operator{
     public function enable_all_items(){
         //...
     }
+
+    /**
+     * Create a buckup of functions-custom-0.php and functions-custom-1.php when the plugin is deactivated
+     * Create a copy in ../../../hui-backup/custom/
+     * Will be deleted when the plugin is activated or in the process of uninstallation
+     */
+    public function create_backup(){
+        //...
+    }
+
+    /**
+     * Remove the buckup of functions-custom-0.php and functions-custom-1.php in ../../../hui-backup/custom/ when the plugin is in the process of uninstallation
+     */
+    public function remove_backup(){
+        //...
+    }
+
+     /**
+     * Move the buckup of functions-custom-0.php and functions-custom-1.php from ../../../hui-backup/custom/ to ./custom/ when the plugin is activated
+     */
+    public function cover_backup(){
+        //...
+    }
 }
 ?>

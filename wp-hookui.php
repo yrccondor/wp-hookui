@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License along with thi
 /**
  * Init
  */
-include('class.itemoperator.php');
+include('class-itemoperator.php');
 $hui_item_operator = new hui_item_operator();
 
 /**
@@ -38,6 +38,7 @@ function hui_init(){
             update_option('hui_hash', $hui_file_hash);
             $hui_init_options = array(
                 'target_file' => 'functions-custom-0.php',
+                'file_backup' => 'false'
             );
             update_option('hui_options', $hui_init_options);
             include('version.php');
@@ -45,8 +46,10 @@ function hui_init(){
             update_option('hui_init', md5(date('Y-m-d H:i:s')));
         }else{
             $hui_item_operator -> set_target('functions-custom-0.php');
+            $hui_item_operator -> cover_backup();
             $hui_item_operator -> enable_all_items();
             $hui_item_operator -> set_target('functions-custom-1.php');
+            $hui_item_operator -> cover_backup();
             $hui_item_operator -> enable_all_items();
             include('version.php');
             if(!get_option('hui_version') || get_option('hui_version')['version'] != $hui_version['version']){
@@ -60,8 +63,13 @@ function hui_init(){
 function hui_disable(){
     $hui_item_operator -> set_target('functions-custom-0.php');
     $hui_item_operator -> disable_all_items();
+    $hui_item_operator -> create_backup();
     $hui_item_operator -> set_target('functions-custom-1.php');
     $hui_item_operator -> disable_all_items();
+    $hui_item_operator -> create_backup();
+    $hui_backup = get_option('hui_options');
+    $hui_backup['file_backup'] = 'true';
+    update_option('hui_options', $hui_backup);
 }
 
 /**
@@ -70,16 +78,19 @@ function hui_disable(){
 include('hui-functions.php');
 
 /**
+ * Set menus
+ */
+include('hui-menus.php');
+
+/**
  * Import main file
  */
-$hui_target_file = get_option('hui_options')['target_file'];
-if($hui_target_file != ''){
+$hui_target_file = get_option('hui_options');
+if($hui_target_file['target_file'] != ''){
     include('custom/'.$hui_target_file);
 }else{
     include('custom/functions-custom-0.php');
-    $hui_init_options = array(
-        'target_file' => 'functions-custom-0.php'
-    );
-    update_option('hui_options', $hui_init_options); //repair
+    $hui_target_file['target_file'] = 'functions-custom-0.php';
+    update_option('hui_options', $hui_target_file); //repair
 }
 ?>
