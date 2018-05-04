@@ -4,7 +4,7 @@
 
 <h1 align="center"><a href="https://hui.flyhigher.top" target="_blank">WPHookUI</a></h1>
 
-> 🍭Wow, such a powerful plugin for WordPress
+> 🍭Wow, such a powerful plugin
 
 <p align="center">
 <a href="https://flyhigher.top"><img alt="Author" src="https://img.shields.io/badge/author-Axton-red.svg?style=flat-square"/></a>
