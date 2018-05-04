@@ -48,6 +48,7 @@ class hui_item_operator{
      * Create a buckup of functions-custom-0.php and functions-custom-1.php when the plugin is deactivated
      * Create a copy in ../../../hui-backup/custom/
      * Will be deleted when the plugin is activated or in the process of uninstallation
+     * Ignore $target_file_name
      */
     public function create_backup(){
         $src = 'custom/';
@@ -71,6 +72,7 @@ class hui_item_operator{
 
     /**
      * Remove the buckup of functions-custom-0.php and functions-custom-1.php in ../../../hui-backup/custom/ when the plugin is in the process of uninstallation
+     * Ignore $target_file_name
      */
     public function remove_backup(){
         $dir = '../../../hui-backup/custom/';
@@ -88,6 +90,7 @@ class hui_item_operator{
 
      /**
      * Move the buckup of functions-custom-0.php and functions-custom-1.php from ../../../hui-backup/custom/ to ./custom/ when the plugin is activated
+     * Ignore $target_file_name
      */
     public function cover_backup(){
         //Remove ./custom/
