@@ -11,8 +11,8 @@ Item-ID: 00000000000000000000000000000001-9999999
 Hook-ID: h1
 Action-ID: a1
 Title: Demo Hook
-Content: a:5:{s:7:"item_id";s:40:"00000000000000000000000000000001-9999999";s:7:"hook_id";s:2:"h1";s:9:"action_id";s:2:"a1";s:5:"title";s:9:"Demo Hook";s:7:"content";a:1:{i:0;s:67:"// Here is an example. You can do anything you want here. Have fun!";}}
-Content-Hash: 0efe8dfe5984c68e23657eeea700389a
+Content: a:4:{s:7:"hook_id";s:2:"h1";s:9:"action_id";s:2:"a1";s:5:"title";s:9:"Demo Hook";s:7:"content";a:1:{i:0;s:67:"// Here is an example. You can do anything you want here. Have fun!";}}
+Content-Hash: eecc762305b3e462397f20ee0bd3b7d9
 Disable: False
 */
 function h1_a1_9999999() {

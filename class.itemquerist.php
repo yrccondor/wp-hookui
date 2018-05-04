@@ -7,6 +7,7 @@ class hui_item_querist{
 
     public function set_target($hui_functions_file_name){
         $this -> $hui_target_file_name = 'custom/'.$hui_functions_file_name;
+        return true;
     }
 
     /**

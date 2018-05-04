@@ -34,16 +34,19 @@ function hui_init(){
             $hui_file_hash = array(
                 'hash_0' => md5_file('custom/functions-custom-0.php'),
                 'hash_1' => md5_file('custom/functions-custom-1.php'),
-            )
+            );
+            update_option('hui_hash', $hui_file_hash);
             $hui_init_options = array(
                 'target_file' => 'functions-custom-0.php',
-                'group_hash' => $hui_file_hash,
             );
             update_option('hui_options', $hui_init_options);
             include('version.php');
             update_option('hui_version', $hui_version);
             update_option('hui_init', md5(date('Y-m-d H:i:s')));
         }else{
+            $hui_item_operator -> set_target('functions-custom-0.php');
+            $hui_item_operator -> enable_all_items();
+            $hui_item_operator -> set_target('functions-custom-1.php');
             $hui_item_operator -> enable_all_items();
             include('version.php');
             if(!get_option('hui_version') || get_option('hui_version')['version'] != $hui_version['version']){
@@ -55,6 +58,9 @@ function hui_init(){
 }
 
 function hui_disable(){
+    $hui_item_operator -> set_target('functions-custom-0.php');
+    $hui_item_operator -> disable_all_items();
+    $hui_item_operator -> set_target('functions-custom-1.php');
     $hui_item_operator -> disable_all_items();
 }
 
