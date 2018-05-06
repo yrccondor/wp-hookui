@@ -6,7 +6,7 @@
 
 <p align="center">
 <a href="https://flyhigher.top"><img alt="Author" src="https://img.shields.io/badge/author-Axton-red.svg?style=flat-square"/></a>
-<img alt="WordPress" src="https://img.shields.io/badge/dynamic/json.svg?label=build&url=https%3A%2F%2Fhui.flyhigher.top%2Fbuild.json&query=%24.sta&colorB=44cc11&style=flat-square"/>
+<img alt="build" src="https://img.shields.io/badge/dynamic/json.svg?label=build&url=https%3A%2F%2Fhui.flyhigher.top%2Fbuild.json&query=%24.sta&colorB=44cc11&style=flat-square"/>
 <a href="https://github.com/yrccondor/wp-hookui/releases"><img alt="releases" src="https://img.shields.io/github/release/yrccondor/wp-hookui.svg?style=flat-square"/></a>
 <img alt="WordPress" src="https://img.shields.io/badge/WordPress-4.4%2B-blue.svg?style=flat-square"/>
 <a href="https://github.com/yrccondor/wp-hookui/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-GPL%20V3.0-orange.svg?style=flat-square"/></a>
