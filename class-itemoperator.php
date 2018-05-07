@@ -44,15 +44,9 @@ class hui_item_operator{
         //...
     }
 
-    /**
-     * Create a buckup of functions-custom-0.php and functions-custom-1.php when the plugin is deactivated
-     * Create a copy in ../../../hui-backup/custom/
-     * Will be deleted when the plugin is activated or in the process of uninstallation
-     * Ignore $target_file_name
-     */
-    public function create_backup(){
-        $src = 'custom/';
-        $dst = '../../../hui-backup/custom/'
+    private function copy_dir($hui_before, $hui_after){
+        $src = $hui_before;
+        $dst = $hui_after;
 
         $dir = opendir($src); 
         @mkdir($dst); 
@@ -70,12 +64,8 @@ class hui_item_operator{
         return true;
     }
 
-    /**
-     * Remove the buckup of functions-custom-0.php and functions-custom-1.php in ../../../hui-backup/custom/ when the plugin is in the process of uninstallation
-     * Ignore $target_file_name
-     */
-    public function remove_backup(){
-        $dir = '../../../hui-backup/custom/';
+    private function delete_dir($hui_path){
+        $dir = $hui_path;
 
         $handle = @opendir($dir);
         while(($file = readdir($handle)) !== false){   
@@ -88,41 +78,34 @@ class hui_item_operator{
         return rmdir($dir);
     }
 
+    /**
+     * Create a buckup of functions-custom-0.php and functions-custom-1.php when the plugin is deactivated
+     * Create a copy in ../../../hui-backup/custom/
+     * Will be deleted when the plugin is activated or in the process of uninstallation
+     * Ignore $target_file_name
+     */
+    public function create_backup(){
+        return $this -> copy_dir('custom/', '../../../hui-backup/custom/');
+    }
+
+    /**
+     * Remove the buckup of functions-custom-0.php and functions-custom-1.php in ../../../hui-backup/custom/ when the plugin is in the process of uninstallation
+     * Ignore $target_file_name
+     */
+    public function remove_backup(){
+        return $this -> delete_dir('../../../hui-backup/custom/');
+    }
+
      /**
      * Move the buckup of functions-custom-0.php and functions-custom-1.php from ../../../hui-backup/custom/ to ./custom/ when the plugin is activated
      * Ignore $target_file_name
      */
     public function cover_backup(){
         //Remove ./custom/
-        $dir = 'custom/';
-
-        $handle = @opendir($dir);
-        while(($file = readdir($handle)) !== false){   
-            if($file != '.' && $file != '..'){   
-                $dir = $dir.'/'.$file;
-                unlink($dir);
-            }
-        }
-        closedir($handle);
-        rmdir($dir);
+        $this -> delete_dir('./custom/');
 
         //Copy ../../../hui-backup/custom/ to ./custom/
-        $dst = 'custom/';
-        $src = '../../../hui-backup/custom/'
-
-        $dirc = opendir($src); 
-        @mkdir($dst); 
-        while(false !== ($file = readdir($dirc))){ 
-            if(($file != '.') && $file != '..')){ 
-                if(is_dir($src.'/'.$file)){ 
-                    recurse_copy($src.'/'.$file,$dst. '/'.$file); 
-                } 
-                else { 
-                    copy($src.'/'.$file,$dst.'/'.$file); 
-                } 
-            } 
-        } 
-        closedir($dirc);
+        $this -> copy_dir('../../../hui-backup/custom/', 'custom/');
 
         //Delete ../../../hui-backup/custom/
         return $this -> remove_backup();

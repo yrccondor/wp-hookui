@@ -32,8 +32,8 @@ function hui_init(){
     }else{
         if(!get_option('hui_init')){
             $hui_file_hash = array(
-                'hash_0' => md5_file('custom/functions-custom-0.php'),
-                'hash_1' => md5_file('custom/functions-custom-1.php'),
+                'functions-custom-0.php' => md5_file('custom/functions-custom-0.php'),
+                'functions-custom-1.php' => md5_file('custom/functions-custom-1.php'),
             );
             update_option('hui_hash', $hui_file_hash);
             $hui_init_options = array(

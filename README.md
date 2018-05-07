@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://img.flyhigher.top/hui-top.jpg" alt="WPHookUI">
+<img src="https://img.flyhigher.top/hui-top2.jpg" alt="WPHookUI">
 </p>
 
 > Let's make your WordPress more powerful.
