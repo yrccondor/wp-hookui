@@ -11,7 +11,7 @@ class hui_item_querist{
     }
 
     /**
-     * Search a item by key
+     * Search an item by key
      * $hui_item_key: A array of the item's info
      * return the ID of the first matched item or FALSE
      */
@@ -20,8 +20,8 @@ class hui_item_querist{
     }
 
     /**
-     * Get infos about a item
-     * return a array of the item's info or FALSE
+     * Get infos about an item
+     * return an array of the item's info or FALSE
      */
     public function get_item_info($hui_item_id){
         //...
@@ -29,7 +29,7 @@ class hui_item_querist{
 
     /**
      * List important info of all items
-     * return a array of all items' important info or FALSE
+     * return an array of all items' important info or FALSE
      */
     public function list_item(){
         //...

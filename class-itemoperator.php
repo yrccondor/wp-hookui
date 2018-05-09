@@ -1,7 +1,7 @@
 <?php
 /**
  * For operating items in functions-custom-0.php and functions-custom-1.php
- * $hui_item_content: a array of the item's info
+ * $hui_item_content: an array of the item's info
  * return TRUE or FALSE
  */
 class hui_item_operator{
