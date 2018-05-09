@@ -1,0 +1,157 @@
+{
+    "version": "init",
+    "hooks": {
+        "h1": {
+            "name": "页面加载",
+            "description": "在每个页面加载时触发",
+            "hook_name": "init",
+            "actions": ["a1", "a2"],
+            "args": [],
+            "args_description": []
+        },
+        "h2": {
+            "name": "发送页面头部",
+            "description": "在发送每个页面的头部（header）时触发",
+            "hook_name": "send_headers",
+            "actions": ["a1", "a2", "a3"],
+            "args": [],
+            "args_description": []
+        },
+        "h3": {
+            "name": "输出脚本/样式表",
+            "description": "在输出脚本/样式表时触发",
+            "hook_name": "wp_enqueue_scripts",
+            "actions": ["a1", "a2", "a4"],
+            "args": [],
+            "args_description": []
+        },
+        "h4": {
+            "name": "输出页脚",
+            "description": "在输出前台每个页面的页脚时触发",
+            "hook_name": "wp_footer",
+            "actions": ["a1", "a2", "a5"],
+            "args": [],
+            "args_description": []
+        },
+        "h5": {
+            "name": "处理页面小工具",
+            "description": "在处理页面小工具相关内容时触发",
+            "hook_name": "widgets_init",
+            "actions": ["a1", "a2", "a6"],
+            "args": [],
+            "args_description": []
+        },
+        "h6": {
+            "name": "加载后台页面",
+            "description": "在加载每个后台页面时触发",
+            "hook_name": "admin_init",
+            "actions": ["a1", "a2"],
+            "args": [],
+            "args_description": []
+        },
+        "h7": {
+            "name": "有用户被删除",
+            "description": "在有用户被删除时触发",
+            "hook_name": "delete_user",
+            "actions": ["a1", "a2"],
+            "args": ["$user_id"],
+            "args_description": ["被删除的用户 ID"]
+        },
+        "h8": {
+            "name": "验证用户登录信息",
+            "description": "在验证用户登录信息时触发",
+            "hook_name": "wp_authenticate",
+            "actions": ["a1", "a2", "a7"],
+            "args": ["$user_name"],
+            "args_description": ["填写的用户名"]
+        },
+        "h9": {
+            "name": "加载登录表单",
+            "description": "在加载登录表单时触发",
+            "hook_name": "login_form",
+            "actions": ["a1", "a2"],
+            "args": [],
+            "args_description": []
+        },
+        "h10": {
+            "name": "有用户更新资料",
+            "description": "在有用户更新资料时触发",
+            "hook_name": "profile_update",
+            "actions": ["a1", "a2", "a8"],
+            "args": ["$user_id"],
+            "args_description": ["提交更新的用户 ID"]
+        },
+        "h11": {
+            "name": "有文章状态更改",
+            "description": "在有文章状态更改时触发",
+            "hook_name": "transition_post_status",
+            "actions": ["a1", "a2", "a9"],
+            "args": ["$new_status", "$old_status", "$post"],
+            "args_description": ["文章新状态", "文章原状态", "WordPress 文章对象"]
+        },
+        "h12": {
+            "name": "有文章被保存",
+            "description": "在有文章被保存时触发",
+            "hook_name": "save_post",
+            "actions": ["a1", "a2"],
+            "args": ["$post_id"],
+            "args_description": ["被保存的文章 ID"]
+        },
+        "h13": {
+            "name": "处理后台首页“概览”小工具",
+            "description": "在处理后台首页“概览”小工具相关内容时触发",
+            "hook_name": "activity_box_end",
+            "actions": ["a1", "a2", "a10"],
+            "args": [],
+            "args_description": []
+        },
+        "h14": {
+            "name": "输出页首",
+            "description": "在输出前台每个页首时触发",
+            "hook_name": "wp_head",
+            "actions": ["a1", "a2"],
+            "args": [],
+            "args_description": []
+        },
+        "h15": {
+            "name": "有评论被批准",
+            "description": "在有评论被批准时触发",
+            "hook_name": "comment_unapproved_to_approved",
+            "actions": ["a1", "a2", "a11"],
+            "args": ["$comment"],
+            "args_description": ["WordPress 评论对象"]
+        },
+        "h16": {
+            "name": "处理搜索表单之前",
+            "description": "在处理搜索表单之前触发",
+            "hook_name": "pre_get_search_form",
+            "actions": ["a1", "a2"],
+            "args": [],
+            "args_description": []
+        },
+        "h17": {
+            "name": "输出登录页页首",
+            "description": "在输出登录页页首时触发",
+            "hook_name": "login_head",
+            "actions": ["a1", "a2", "a14"],
+            "args": [],
+            "args_description": []
+        },
+        "h18": {
+            "name": "输出后台页脚",
+            "description": "在输出所有后台页面页脚时触发",
+            "hook_name": "admin_footer",
+            "actions": ["a1", "a2"],
+            "args": [],
+            "args_description": []
+        },
+        "h19": {
+            "name": "用户登出",
+            "description": "在用户登出时触发",
+            "hook_name": "wp_logout",
+            "actions": ["a1", "a2", "a15"],
+            "args": [],
+            "args_description": []
+        }
+    }
+}
