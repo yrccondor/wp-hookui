@@ -3,12 +3,12 @@
  * For querying items in functions-custom-0.php and functions-custom-1.php
  */
 class hui_item_querist{
-    var $hui_target_file_name = 'custom/functions-custom-0.php';
+    var $hui_target_file_name;
 
-    public function set_target($hui_functions_file_name){
-        $this -> $hui_target_file_name = 'custom/'.$hui_functions_file_name;
-        return true;
+    function __construct($hui_functions_file_name){
+        $this -> hui_target_file_name = 'custom/'.$hui_functions_file_name;
     }
+
 
     /**
      * Search an item by key

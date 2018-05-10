@@ -18,7 +18,8 @@ You should have received a copy of the GNU General Public License along with thi
  * Init
  */
 include('class-itemoperator.php');
-$hui_item_operator = new hui_item_operator();
+$hui_item_operator_0 = new hui_item_operator('functions-custom-0.php');
+$hui_item_operator_1 = new hui_item_operator('functions-custom-1.php');
 
 /**
  * For activation && deactivation
@@ -45,11 +46,9 @@ function hui_init(){
             update_option('hui_version', $hui_version);
             update_option('hui_init', md5(date('Y-m-d H:i:s')));
         }else{
-            $hui_item_operator -> cover_backup();
-            $hui_item_operator -> set_target('functions-custom-0.php');
-            $hui_item_operator -> enable_all_items();
-            $hui_item_operator -> set_target('functions-custom-1.php');
-            $hui_item_operator -> enable_all_items();
+            $hui_item_operator_0 -> cover_backup();
+            $hui_item_operator_0 -> enable_all_items();
+            $hui_item_operator_1 -> enable_all_items();
             include('version.php');
             if(!get_option('hui_version') || get_option('hui_version')['version'] != $hui_version['version']){
                 update_option('hui_version', $hui_version); //update version
@@ -60,11 +59,9 @@ function hui_init(){
 }
 
 function hui_disable(){
-    $hui_item_operator -> set_target('functions-custom-0.php');
-    $hui_item_operator -> disable_all_items();
-    $hui_item_operator -> set_target('functions-custom-1.php');
-    $hui_item_operator -> disable_all_items();
-    $hui_item_operator -> create_backup();
+    $hui_item_operator_0 -> disable_all_items();
+    $hui_item_operator_1 -> disable_all_items();
+    $hui_item_operator_0 -> create_backup();
     $hui_backup = get_option('hui_options');
     $hui_backup['file_backup'] = 'true';
     update_option('hui_options', $hui_backup);
