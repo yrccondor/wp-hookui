@@ -11,7 +11,7 @@
         },
         "h2": {
             "name": "发送页面头部",
-            "description": "在发送每个页面的头部（header）时触发",
+            "description": "在发送每个页面的头部（HTTP Header）时触发",
             "hook_name": "send_headers",
             "actions": ["a0", "a1", "a2", "a3"],
             "args": [],
