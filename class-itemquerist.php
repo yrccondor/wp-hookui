@@ -11,12 +11,22 @@ class hui_item_querist{
 
 
     /**
-     * Search an item by key
-     * $hui_item_key: A array of the item's info
+     * Search an item by title
      * return the ID of the first matched item or FALSE
      */
-    public function search_item($hui_item_key){
-        //...
+    public function search_item($hui_item_title){
+        $item_list = $this -> data_to_array();
+        $item_id = "";
+        if($item_list === false){
+            return false;
+        }
+        for ($i = 0; $i < sizeof($item_list); $i++){
+            if(strpos($item_list[$i]["title"], $hui_item_title) !== false){
+                $item_id = $item_list[$i]["item_id"];
+                break;
+            }
+        }
+        return $item_id;
     }
 
     /**
@@ -24,13 +34,16 @@ class hui_item_querist{
      * return an array of the item's info or FALSE
      */
     public function get_item_info($hui_item_id){
-        $item_list = data_to_array();
+        $item_list = $this -> data_to_array();
+        if($item_list === false){
+            return false;
+        }
         for ($i = 0; $i < sizeof($item_list); $i++){
             if($item_list[$i]["item_id"] === $hui_item_id){
                 break;
             }
         }
-        return $this -> $item_list[$i];
+        return $item_list[$i];
     }
 
     /**
@@ -38,12 +51,25 @@ class hui_item_querist{
      * return an array of all items' important info or FALSE
      */
     public function list_item(){
-        //...
+        $item_list = $this -> data_to_array();
+        if($item_list === false){
+            return false;
+        }
+        $imp_list = array();
+        for ($i = 0; $i < sizeof($item_list); $i++){
+            $imp_list[$i] = array();
+            $imp_list[$i]["item_id"] =  $item_list[$i]["item_id"];
+            $imp_list[$i]["hook_id"] =  $item_list[$i]["hook_id"];
+            $imp_list[$i]["action_id"] =  $item_list[$i]["action_id"];
+            $imp_list[$i]["title"] =  $item_list[$i]["title"];
+            $imp_list[$i]["disable"] =  $item_list[$i]["disable"];
+        }
+        return $imp_list;
     }
 
     /**
      * Read data from target file, convert it to array
-     * return an array of all items' important info or FALSE
+     * return an array of all items' info or FALSE
      */
     private function data_to_array(){
         $file = fopen($this -> hui_target_file_name, "r");
@@ -100,7 +126,11 @@ class hui_item_querist{
             }
         }
         fclose($file);
-        return $data;
+        if($match_sta === 0){
+            return $data;
+        }else{
+            return false;
+        }
     }
 }
 ?>
