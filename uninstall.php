@@ -13,7 +13,6 @@ delete_option('hui_init');
 delete_option('hui_version');
 
 //Remove backup
-include('class-itemoperator.php');
-$hui_item_operator_0 = new hui_item_operator('functions-custom-0.php');
-$hui_item_operator_0 -> remove_backup();
+include('hui-functions.php');
+remove_backup();
 ?>

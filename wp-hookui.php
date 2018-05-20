@@ -22,6 +22,11 @@ $hui_item_operator_0 = new hui_item_operator('functions-custom-0.php');
 $hui_item_operator_1 = new hui_item_operator('functions-custom-1.php');
 
 /**
+ * Import functions
+ */
+include('hui-functions.php');
+
+/**
  * For activation && deactivation
  */
 register_activation_hook(__FILE__, 'hui_init');
@@ -46,7 +51,7 @@ function hui_init(){
             update_option('hui_version', $hui_version);
             update_option('hui_init', md5(date('Y-m-d H:i:s')));
         }else{
-            $hui_item_operator_0 -> cover_backup();
+            cover_backup();
             $hui_item_operator_0 -> enable_all_items();
             $hui_item_operator_1 -> enable_all_items();
             include('version.php');
@@ -61,16 +66,11 @@ function hui_init(){
 function hui_disable(){
     $hui_item_operator_0 -> disable_all_items();
     $hui_item_operator_1 -> disable_all_items();
-    $hui_item_operator_0 -> create_backup();
+    create_backup();
     $hui_backup = get_option('hui_options');
     $hui_backup['file_backup'] = 'true';
     update_option('hui_options', $hui_backup);
 }
-
-/**
- * Import functions
- */
-include('hui-functions.php');
 
 /**
  * Set menus
