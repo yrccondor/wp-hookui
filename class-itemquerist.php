@@ -21,12 +21,16 @@ class hui_item_querist{
             return false;
         }
         for ($i = 0; $i < sizeof($item_list); $i++){
-            if(strpos($item_list[$i]["title"], $hui_item_title) !== false){
+            if(strpos(strtolower($item_list[$i]["title"]), strtolower($hui_item_title)) !== false){
                 $item_id = $item_list[$i]["item_id"];
                 break;
             }
         }
-        return $item_id;
+        if($item_id === ""){
+            return false;
+        }else{
+            return $item_id;
+        }
     }
 
     /**
@@ -50,7 +54,7 @@ class hui_item_querist{
      * List important info of all items
      * return an array of all items' important info or FALSE
      */
-    public function list_item(){
+    public function list_items(){
         $item_list = $this -> data_to_array();
         if($item_list === false){
             return false;
@@ -71,43 +75,41 @@ class hui_item_querist{
      * Read data from target file, convert it to array
      * return an array of all items' info or FALSE
      */
-    private function data_to_array(){
+    public function data_to_array(){
         $file = fopen($this -> hui_target_file_name, "r");
         $data = array();
         $item_id = array();
         $item_num = 0;
         $match_sta = 0;
         while(!feof($file)){
-            $content = fgets($file)
-            if(preg_match_all("/\-------([0-9]|[A-z]){32}-([0-9]|[A-z]){7}-Start-------\d*/is", $content, $item_id)) && $match_sta === 0){
+            $content = fgets($file);
+            if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-Start-------\d*/is", $content, $item_id) && $match_sta === 0){
                 $data[$item_num] = array();
-                $data[$item_num]["item_id"] = substr($item_id[0], 7, 40);
+                //$data[$item_num]["item_id"] = substr($item_id[0][0], 7, 40);
                 $match_sta = 1;
             }else if($match_sta === 1){
-                if($data[$item_num]["item_id"] !==  substr($content, 9)){
-                    return false;
-                }
+                $data[$item_num]["item_id"] =  substr($content, 9, -2);
                 $match_sta = 2;
             }else if($match_sta === 2){
-                $data[$item_num]["hook_id"] = substr($content, 9);
+                $data[$item_num]["hook_id"] = substr($content, 9, -2);
                 $match_sta = 3;
             }else if($match_sta === 3){
-                $data[$item_num]["action_id"] = substr($content, 11);
+                $data[$item_num]["action_id"] = substr($content, 11, -2);
                 $match_sta = 4;
             }else if($match_sta === 4){
-                $data[$item_num]["title"] = substr($content, 7);
+                $data[$item_num]["title"] = substr($content, 7, -2);
                 $match_sta = 5;
             }else if($match_sta === 5){
-                $data[$item_num]["content"] = substr($content, 9);
+                $data[$item_num]["content"] = substr($content, 9, -2);
                 $match_sta = 6;
             }else if($match_sta === 6){
-                $content_hash = substr($content, 14);
+                $content_hash = substr($content, 14, -2);
                 if(md5($data[$item_num]["content"]) !== $content_hash){
                     return false;
                 }
                 $match_sta = 7;
             }else if($match_sta === 7){
-                $disabled_content = substr($content, 9);
+                $disabled_content = substr($content, 9, -2);
                 $disabled = false;
                 if($disabled_content === "True"){
                     $disabled = true;
@@ -116,7 +118,7 @@ class hui_item_querist{
                 }
                 $data[$item_num]["disable"] = $disabled;
                 $match_sta = 8;
-            }else if(preg_match_all("/\-------([0-9]|[A-z]){32}-([0-9]|[A-z]){7}-End-------\d*/is", $content))){
+            }else if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-End-------\d*/is", $content)){
                 if($match_sta !== 8){
                     return false;
                 }else{
