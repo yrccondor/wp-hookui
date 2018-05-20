@@ -72,6 +72,66 @@ class hui_item_querist{
     }
 
     /**
+     * Create or update cache-*.json of items' info
+     * return TRUE or FALSE
+     */
+    public function update_cache(){
+        $item_list = $this -> data_to_array();
+        if($item_list === false){
+            return 'false';
+        }
+        $data = array();
+        $data['time'] = date('Y-m-d H:i:s');
+        $data['data'] = $item_list;
+        $json_data = json_encode($data);
+        if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
+            $cache_name = 'cache-0.json';
+        }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
+            $cache_name = 'cache-1.json';
+        }else{
+            return false;
+        }
+        return file_put_contents($cache_name, $json_data);
+    }
+
+    /**
+     * Check whether the cache need to be updated
+     * return TRUE or FALSE
+     */
+    public function check_cache_time(){
+        if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
+            $cache_name = 'cache-0.json';
+        }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
+            $cache_name = 'cache-1.json';
+        }else{
+            return false;
+        }
+        $json_data = file_get_contents($cache_name);
+        $data = json_decode($json_data, true);
+        $time_delta = strtotime(date("Y-m-d H:i:s")) - strtotime($data['time']);
+        if($time_delta >= 180){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Remove cache-*.json of items' info
+     * return TRUE or FALSE
+     */
+    public function remove_cache(){
+        if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
+            $cache_name = 'cache-0.json';
+        }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
+            $cache_name = 'cache-1.json';
+        }else{
+            return false;
+        }
+        return unlink($cache_name);
+    }
+
+    /**
      * Read data from target file, convert it to array
      * return an array of all items' info or FALSE
      */
@@ -85,31 +145,30 @@ class hui_item_querist{
             $content = fgets($file);
             if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-Start-------\d*/is", $content, $item_id) && $match_sta === 0){
                 $data[$item_num] = array();
-                //$data[$item_num]["item_id"] = substr($item_id[0][0], 7, 40);
                 $match_sta = 1;
             }else if($match_sta === 1){
-                $data[$item_num]["item_id"] =  substr($content, 9, -2);
+                $data[$item_num]["item_id"] =  substr($content, 9, -1);
                 $match_sta = 2;
             }else if($match_sta === 2){
-                $data[$item_num]["hook_id"] = substr($content, 9, -2);
+                $data[$item_num]["hook_id"] = substr($content, 9, -1);
                 $match_sta = 3;
             }else if($match_sta === 3){
-                $data[$item_num]["action_id"] = substr($content, 11, -2);
+                $data[$item_num]["action_id"] = substr($content, 11, -1);
                 $match_sta = 4;
             }else if($match_sta === 4){
-                $data[$item_num]["title"] = substr($content, 7, -2);
+                $data[$item_num]["title"] = substr($content, 7, -1);
                 $match_sta = 5;
             }else if($match_sta === 5){
-                $data[$item_num]["content"] = substr($content, 9, -2);
+                $data[$item_num]["content"] = substr($content, 9, -1);
                 $match_sta = 6;
             }else if($match_sta === 6){
-                $content_hash = substr($content, 14, -2);
+                $content_hash = substr($content, 14, -1);
                 if(md5($data[$item_num]["content"]) !== $content_hash){
                     return false;
                 }
                 $match_sta = 7;
             }else if($match_sta === 7){
-                $disabled_content = substr($content, 9, -2);
+                $disabled_content = substr($content, 9, -1);
                 $disabled = false;
                 if($disabled_content === "True"){
                     $disabled = true;

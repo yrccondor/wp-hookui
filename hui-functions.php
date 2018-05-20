@@ -4,7 +4,7 @@
  */
 
 //Add language support
-// load_plugin_textdomain('hui', false, basename(dirname( __FILE__ )).'/languages' );
+load_plugin_textdomain('hui', false, basename(dirname( __FILE__ )).'/languages' );
 
 function hui_copy_dir($hui_before, $hui_after){
     $src = $hui_before;
