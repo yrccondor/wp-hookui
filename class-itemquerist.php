@@ -96,7 +96,7 @@ class hui_item_querist{
 
     /**
      * Check whether the cache need to be updated
-     * return TRUE or FALSE
+     * return items' info, TRUE or FALSE
      */
     public function check_cache_time(){
         if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
@@ -112,7 +112,7 @@ class hui_item_querist{
         if($time_delta >= 180){
             return true;
         }else{
-            return false;
+            return $data['data'];
         }
     }
 
@@ -136,61 +136,81 @@ class hui_item_querist{
      * return an array of all items' info or FALSE
      */
     public function data_to_array(){
-        $file = fopen($this -> hui_target_file_name, "r");
-        $data = array();
-        $item_id = array();
-        $item_num = 0;
-        $match_sta = 0;
-        while(!feof($file)){
-            $content = fgets($file);
-            if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-Start-------\d*/is", $content, $item_id) && $match_sta === 0){
-                $data[$item_num] = array();
-                $match_sta = 1;
-            }else if($match_sta === 1){
-                $data[$item_num]["item_id"] =  substr($content, 9, -1);
-                $match_sta = 2;
-            }else if($match_sta === 2){
-                $data[$item_num]["hook_id"] = substr($content, 9, -1);
-                $match_sta = 3;
-            }else if($match_sta === 3){
-                $data[$item_num]["action_id"] = substr($content, 11, -1);
-                $match_sta = 4;
-            }else if($match_sta === 4){
-                $data[$item_num]["title"] = substr($content, 7, -1);
-                $match_sta = 5;
-            }else if($match_sta === 5){
-                $data[$item_num]["content"] = substr($content, 9, -1);
-                $match_sta = 6;
-            }else if($match_sta === 6){
-                $content_hash = substr($content, 14, -1);
-                if(md5($data[$item_num]["content"]) !== $content_hash){
-                    return false;
-                }
-                $match_sta = 7;
-            }else if($match_sta === 7){
-                $disabled_content = substr($content, 9, -1);
-                $disabled = false;
-                if($disabled_content === "True"){
-                    $disabled = true;
-                }else if($disabled_content !== "True" && $disabled_content !== "False"){
-                    return false;
-                }
-                $data[$item_num]["disable"] = $disabled;
-                $match_sta = 8;
-            }else if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-End-------\d*/is", $content)){
-                if($match_sta !== 8){
-                    return false;
-                }else{
-                    $item_num++;
-                    $match_sta = 0;
-                }
-            }
-        }
-        fclose($file);
-        if($match_sta === 0){
-            return $data;
+        f($this -> hui_target_file_name === "custom/functions-custom-0.php"){
+            $cache_name = 'cache-0.json';
+        }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
+            $cache_name = 'cache-1.json';
         }else{
             return false;
+        }
+        if(!file_exists($cache_name)){
+            $file = fopen($this -> hui_target_file_name, "r");
+            $data = array();
+            $item_id = array();
+            $item_num = 0;
+            $match_sta = 0;
+            while(!feof($file)){
+                $content = fgets($file);
+                if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-Start-------\d*/is", $content, $item_id) && $match_sta === 0){
+                    $data[$item_num] = array();
+                    $match_sta = 1;
+                }else if($match_sta === 1){
+                    $data[$item_num]["item_id"] =  trim(substr($content, 9));
+                    $match_sta = 2;
+                }else if($match_sta === 2){
+                    $data[$item_num]["hook_id"] = trim(substr($content, 9));
+                    $match_sta = 3;
+                }else if($match_sta === 3){
+                    $data[$item_num]["action_id"] = trim(substr($content, 11));
+                    $match_sta = 4;
+                }else if($match_sta === 4){
+                    $data[$item_num]["title"] = trim(substr($content, 7));
+                    $match_sta = 5;
+                }else if($match_sta === 5){
+                    $data[$item_num]["content"] = trim(substr($content, 9));
+                    $match_sta = 6;
+                }else if($match_sta === 6){
+                    $content_hash = trim(substr($content, 14));
+                    if(md5($data[$item_num]["content"]) !== $content_hash){
+                        return false;
+                    }
+                    $match_sta = 7;
+                }else if($match_sta === 7){
+                    $disabled_content = trim(substr($content, 9));
+                    $disabled = false;
+                    if($disabled_content === "True"){
+                        $disabled = true;
+                    }else if($disabled_content !== "True" && $disabled_content !== "False"){
+                        return false;
+                    }
+                    $data[$item_num]["disable"] = $disabled;
+                    $match_sta = 8;
+                }else if(preg_match_all("/\-------([0-9]|[a-f]){32}-([0-9]|[a-f]){7}-End-------\d*/is", $content)){
+                    if($match_sta !== 8){
+                        return false;
+                    }else{
+                        $item_num++;
+                        $match_sta = 0;
+                    }
+                }
+            }
+            fclose($file);
+            if($match_sta === 0){
+                return $data;
+            }else{
+                return false;
+            }
+        }else{
+            $item_data = $this -> check_cache_time();
+            if($item_data === true){
+                $this -> update_cache();
+                $json_data = file_get_contents($cache_name);
+                $data = json_decode($json_data, true);
+                return $data['data'];
+            }else{
+                return $item_data;
+            }
+            
         }
     }
 }
