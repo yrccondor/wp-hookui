@@ -15,7 +15,7 @@ class hui_item_querist{
      * return the ID of the first matched item or FALSE
      */
     public function search_item($hui_item_title){
-        $item_list = $this -> data_to_array();
+        $item_list = $this -> data_to_array(false);
         $item_id = "";
         if($item_list === false){
             return false;
@@ -38,7 +38,7 @@ class hui_item_querist{
      * return an array of the item's info or FALSE
      */
     public function get_item_info($hui_item_id){
-        $item_list = $this -> data_to_array();
+        $item_list = $this -> data_to_array(false);
         if($item_list === false){
             return false;
         }
@@ -55,7 +55,7 @@ class hui_item_querist{
      * return an array of all items' important info or FALSE
      */
     public function list_items(){
-        $item_list = $this -> data_to_array();
+        $item_list = $this -> data_to_array(false);
         if($item_list === false){
             return false;
         }
@@ -72,78 +72,47 @@ class hui_item_querist{
     }
 
     /**
-     * Create or update cache-*.json of items' info
+     * Update cache of items' info
      * return TRUE or FALSE
      */
-    public function update_cache(){
-        $item_list = $this -> data_to_array();
-        if($item_list === false){
-            return 'false';
-        }
-        $data = array();
-        $data['time'] = date('Y-m-d H:i:s');
-        $data['data'] = $item_list;
-        $json_data = json_encode($data);
-        if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
-            $cache_name = 'cache-0.json';
-        }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
-            $cache_name = 'cache-1.json';
-        }else{
-            return false;
-        }
-        return file_put_contents($cache_name, $json_data);
+    private function update_cache(){
+        return $this -> data_to_array(true);
     }
 
     /**
      * Check whether the cache need to be updated
-     * return items' info, TRUE or FALSE
+     * return TRUE or FALSE
      */
-    public function check_cache_time(){
+    private function check_cache_time(){
         if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
-            $cache_name = 'cache-0.json';
+            $cache_name = 'hui_cache_0';
         }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
-            $cache_name = 'cache-1.json';
+            $cache_name = 'hui_cache_1';
         }else{
             return false;
         }
-        $json_data = file_get_contents($cache_name);
-        $data = json_decode($json_data, true);
+        $data = get_option($cache_name);
         $time_delta = strtotime(date("Y-m-d H:i:s")) - strtotime($data['time']);
         if($time_delta >= 180){
             return true;
         }else{
-            return $data['data'];
-        }
-    }
-
-    /**
-     * Remove cache-*.json of items' info
-     * return TRUE or FALSE
-     */
-    public function remove_cache(){
-        if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
-            $cache_name = 'cache-0.json';
-        }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
-            $cache_name = 'cache-1.json';
-        }else{
             return false;
         }
-        return unlink($cache_name);
     }
 
     /**
      * Read data from target file, convert it to array
      * return an array of all items' info or FALSE
      */
-    public function data_to_array(){
-        f($this -> hui_target_file_name === "custom/functions-custom-0.php"){
-            $cache_name = 'cache-0.json';
+    public function data_to_array($hui_update){
+        if($this -> hui_target_file_name === "custom/functions-custom-0.php"){
+            $cache_name = 'hui_cache_0';
         }else if($this -> hui_target_file_name === "custom/functions-custom-1.php"){
-            $cache_name = 'cache-1.json';
+            $cache_name = 'hui_cache_1';
         }else{
             return false;
         }
-        if(!file_exists($cache_name)){
+        if(!get_option($cache_name) || $hui_update){
             $file = fopen($this -> hui_target_file_name, "r");
             $data = array();
             $item_id = array();
@@ -196,19 +165,20 @@ class hui_item_querist{
             }
             fclose($file);
             if($match_sta === 0){
+                $data_time = array();
+                $data_time['time'] = date('Y-m-d H:i:s');
+                $data_time['data'] = $data;
+                update_option($cache_name, $data_time);
                 return $data;
             }else{
                 return false;
             }
         }else{
             $item_data = $this -> check_cache_time();
-            if($item_data === true){
-                $this -> update_cache();
-                $json_data = file_get_contents($cache_name);
-                $data = json_decode($json_data, true);
-                return $data['data'];
+            if($item_data){
+                return $this -> update_cache();
             }else{
-                return $item_data;
+                return get_option($cache_name)['data'];
             }
             
         }

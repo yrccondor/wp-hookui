@@ -69,20 +69,4 @@ function hui_cover_backup(){
     //Delete ../../../hui-backup/custom/
     return hui_remove_backup();
 }
-
-/**
- * Encode \n to ---(n)---, \r\n to ---(rn)---, ---(n)--- to ---(-n-)---, ---(rn)--- to ---(-rn-)---
- * return a string
- */
-function encode_rn($hui_string){
-    return str_replace(["\n", "\r\n", '---(n)---', '---(rn)---'], ['---(n)---', '---(rn)---', '---(-n-)---', '---(-rn-)---'], $hui_string);
-}
-
-/**
- * Decode ---(n)--- to \n, ---(rn)--- to \r\n, ---(-n-)--- to ---(n)---, ---(-rn-)--- to ---(rn)---
- * return a string
- */
-function decode_rn($hui_string){
-    return str_replace(['---(n)---', '---(rn)---', '---(-n-)---', '---(-rn-)---'], ["\n", "\r\n", '---(n)---', '---(rn)---'], $hui_string);
-}
 ?>
